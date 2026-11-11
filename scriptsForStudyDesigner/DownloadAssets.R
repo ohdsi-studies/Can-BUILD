@@ -24,11 +24,11 @@ authWebApi(authMethod = "none")
 #  - cohortName: a custom cohort name or set to NA to the ATLAS cohort name
 cohortsToDownload <- tibble::tribble(
   ~atlasCohortId, ~cohortId, ~cohortName,
-  # Placeholders from the OHDSI demo ATLAS (https://atlas-demo.ohdsi.org).
-  # Replace these rows with the real study cohorts.
-  1662241, 1, "new users of ACE inhibitors for hypertension",
-  1662246, 2, "new users of ARBs for hypertension",
-  1662245, 3, "first observed cough"
+  # The study cohorts. These must stay in step with inst/Cohorts.csv, which
+  # this script regenerates.
+  1798688, 1, "Fiscal year cohort with 365 days prior observation",
+  1798701, 2, "Fiscal year cohort with 1095 days prior observation",
+  1797622, 3, "Dummy outcome. If this is in the study you are a dummy"
 )
 
 downloadCohortDefinitionSet(
