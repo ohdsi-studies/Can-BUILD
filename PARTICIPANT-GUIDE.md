@@ -1,99 +1,170 @@
 # Running the Study on Your Data
 
-This guide is for study-a-thon participants. It takes you from a fresh clone to
-aggregate results on your own OMOP CDM, in four steps.
+Instructions for running this study against your own OMOP CDM. If you get stuck
+on anything platform-specific, the [OHDSI HADES guides](#where-to-look-if-you-get-stuck)
+cover it in more detail.
 
-You do **not** edit any tracked file. Everything specific to your site lives in
-one checked-in file (`ExecuteAnalyses.R`), plus `.Renviron` for your password
-if you do not use the OS keychain.
-
----
-
-## Before you start
-
-You need:
-
-- **R 4.6.2** — `renv` pins it.
-- **Java 17 or newer** — DatabaseConnector 8 fails on Java 8 with
-  `NoSuchMethodError: java.nio.ByteBuffer.clear()`.
-- **Git** and a terminal (or RStudio).
-- Read access to your **OMOP CDM**, and a schema you can **write** to.
-- The **JDBC driver** for your database platform.
-
-The study creates cohort tables in your work schema. It never modifies your CDM.
+**The only file you edit is `ExecuteAnalyses.R`.** Everything else is either code
+you do not need to touch, or files this guide tells you to create.
 
 ---
 
-## Step 1 — Clone and restore the R environment
+## 1. Install the environment
+
+Follow [Setting up the R environment](https://ohdsi.github.io/Hades/rSetup.html)
+for your operating system. You need:
+
+- **R 4.6.2** — the version pinned in `renv.lock`. (HADES currently targets 4.6.1;
+  either works, but 4.6.2 is what this study was tested with.)
+- **Java 17 or newer** — [Corretto 21](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html)
+  is what OHDSI recommends.
+- **RStudio** (recommended, not required).
+
+> **Java 8 will not work.** DatabaseConnector 8 fails on it with
+> `NoSuchMethodError: java.nio.ByteBuffer.clear()`. Check with `java -version`.
+
+---
+
+## 2. Get the repository
 
 ```bash
-git clone https://github.com/azimov/Can-BUILD.git
+git clone https://github.com/ohdsi-studies/Can-BUILD.git
 cd Can-BUILD
 ```
 
-Then, in R, from the project root:
+Then in R, from the project folder:
 
 ```r
 renv::restore()
 ```
 
-This installs the ~285 package versions pinned in `renv.lock`. It takes a while
-the first time. **Restart R afterwards.**
+**Restart R afterwards.** The first restore takes a while.
 
-> **Read [renv/README.md](renv/README.md) before running `renv::snapshot()`.**
-> `renv.lock` pins more than the study scripts `library()` on purpose -
-> CohortDiagnostics, OhdsiShinyAppBuilder, OhdsiShinyModules and
-> OhdsiReportGenerator are needed for the results app and the report generator,
-> which load at run time rather than being `library()`-ed. `StudyPackages.R`
-> lists all of them so a snapshot keeps them. You never need to snapshot: just
-> use `renv::restore()`.
-
-> If `renv::restore()` asks to install renv itself or seems to hang before R
-> starts, install renv into your system library once:
-> `install.packages("renv")`, then start R in the project directory again.
+> Do **not** run `renv::snapshot()`. `renv.lock` is frozen before sites run;
+> see [renv/README.md](renv/README.md).
 
 ---
 
-## Step 2 — Tell the study about your database
+## 3. Find out how to connect to your database
 
-Everything you need to change is in the **INPUTS block at the top of
-`ExecuteAnalyses.R`**. Open the file, edit those values, save it. There is no
-separate settings file and no script to run.
+Each database platform needs slightly different connection details. Look yours
+up in [the DatabaseConnector connection reference](https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html)
+— it lists exactly which arguments each platform requires.
 
-```r
-##=========== START OF INPUTS ==========
-cdmDatabaseSchema  <- "my_cdm"       # clinical tables AND vocabulary
-workDatabaseSchema <- "my_scratch"   # must be writable
-cohortTableName    <- "can_build_cohort"
-resultsFolder      <- "results"
-workFolder         <- "strategusInternals"
-databaseName       <- "MY_SITE"
-minCellCount       <- 5
+The common cases:
 
-connectionDetails <- DatabaseConnector::createConnectionDetails(
-  dbms = "postgresql",
-  server = Sys.getenv("OHDSI_SERVER", "db.example.org/cdm"),
-  user = Sys.getenv("OHDSI_USER", "my_user"),
-  password = Sys.getenv("OHDSI_PASSWORD"),
-  pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-)
-##=========== END OF INPUTS ==========
-```
-
-### The password
-
-`ExecuteAnalyses.R` is committed to git, so **do not type your password into
-it**. Use one of these instead:
-
-**OS keychain (recommended).** Store it once per machine:
+### PostgreSQL
 
 ```r
-keyring::key_set("ohdsi")     # prompts for the password, stores it encrypted
+dbms   <- "postgresql"
+server <- "host/database"        # e.g. "db.example.org/cdm"
+user   <- "my_user"
 ```
 
-then set `password = keyring::key_get("ohdsi")` in the INPUTS block.
+### Microsoft SQL Server
 
-**.Renviron.** Create a file called `.Renviron` in the project folder:
+```r
+dbms   <- "sql server"
+server <- "host.example.org"     # host name only - no database name
+user   <- "my_user"
+```
+
+If you leave `user` blank, Windows Integrated Security is used instead.
+
+To use Kerberos from a Mac or Linux machine,
+`extraSettings = "authenticationScheme=JavaKerberos"`, with a ticket from
+`kinit` — see
+[Windows authentication](https://ohdsi.github.io/DatabaseConnector/articles/Connecting.html#windows-authentication-for-sql-server).
+
+### Oracle
+
+```r
+dbms   <- "oracle"
+server <- "host/sid"             # SID, host/sid, host/service name, or a TNS name
+user   <- "my_user"
+```
+
+### Snowflake, IRIS, Spark / Databricks, BigQuery
+
+These use a JDBC connection string rather than host, e.g. for Snowflake:
+
+```r
+dbms             <- "snowflake"
+connectionString <- "jdbc:snowflake://<account>.snowflakecomputing.com/?db=<db>&warehouse=<wh>&schema=<schema>"
+user             <- "my_user"
+```
+
+### Redshift and Synapse
+
+Both accept `server` and `port` like PostgreSQL:
+
+```r
+dbms   <- "redshift"             # or "synapse"
+server <- "host.example.org/database"
+user   <- "my_user"
+```
+
+Check the [reference](https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html)
+for your platform's exact `server` format and default port.
+
+### SQLite and DuckDB
+
+No JDBC driver is needed — the `RSQLite` / `duckdb` packages are used instead.
+Give the database file path as `server`:
+
+```r
+dbms   <- "sqlite"               # or "duckdb"
+server <- "/path/to/database.file"
+```
+
+The full list of supported platforms, and their HADES support status, is at
+[Supported Database Platforms](https://ohdsi.github.io/Hades/supportedPlatforms.html).
+
+---
+
+## 4. Install the database driver
+
+The JDBC driver is a `.jar` file. Put it in a folder and tell R where that
+folder is — ideally once, in your `.Renviron`:
+
+```bash
+DATABASECONNECTOR_JAR_FOLDER="C:/temp/jdbcDrivers"     # Windows
+DATABASECONNECTOR_JAR_FOLDER="/Users/me/jdbcDrivers"   # macOS / Linux
+```
+
+Then download the driver for your platform:
+
+```r
+DatabaseConnector::downloadJdbcDrivers("postgresql")   # or "sql server", "oracle", ...
+```
+
+This works for SQL Server, Oracle, PostgreSQL, PDW, Spark, Redshift, Snowflake,
+BigQuery and Synapse. BigQuery, Netezza, Impala and InterSystems IRIS need to be
+obtained separately — see
+[the driver instructions](https://ohdsi.github.io/DatabaseConnector/reference/jdbcDrivers.html).
+
+To open `.Renviron`:
+
+```r
+usethis::edit_r_environ()    # or create the file yourself in the project folder
+```
+
+`.Renviron` is read **only at R startup** — restart R after editing it.
+
+---
+
+## 5. Put your password somewhere safe
+
+**Do not type your password into `ExecuteAnalyses.R`.** That file is committed to
+GitHub.
+
+Use your operating system's keychain:
+
+```r
+keyring::key_set("ohdsi")     # prompts once, stores it encrypted
+```
+
+Or put it in `.Renviron`, which git ignores:
 
 ```bash
 OHDSI_PASSWORD="your password"
@@ -101,58 +172,81 @@ OHDSI_SERVER="db.example.org/cdm"
 OHDSI_USER="my_user"
 ```
 
-`.Renviron` is in `.gitignore`, so git will not commit it. R reads it **only at
-startup** — after creating or changing it, restart R.
+---
 
-### Check list before your first run
+## 6. Edit the INPUTS block in `ExecuteAnalyses.R`
 
-Work down this list. Each item gives a clear error if it is wrong, so you will
-find out immediately rather than half an hour into a run.
-
-| Check | How to verify |
-|---|---|
-| Java 17 or newer | `export JAVA_HOME=/path/to/jdk-17`, restart R. Java 8 fails with `NoSuchMethodError: java.nio.ByteBuffer.clear()` |
-| JDBC driver present | `DatabaseConnector::downloadJdbcDrivers("postgresql")`, or point `pathToDriver` at a folder of `.jar` files |
-| Password loads | `Sys.getenv("OHDSI_PASSWORD")` returns it, not `""` |
-| Connection works | uncomment the `connect()` / `disconnect()` pair in the INPUTS block and run it |
-| CDM readable | the schema contains `person`, `observation_period` and `visit_occurrence` |
-| Vocabulary present | `concept`, `concept_ancestor` and `concept_relationship` are in the **same** schema as `person` |
-| Work schema writable | your database user has `CREATE` permission in `workDatabaseSchema` |
-
-The vocabulary item trips people up most often: many sites keep the vocabulary
-in a separate schema from the clinical data. The study needs both in one schema,
-or a view layer that exposes both as one.
-
-
-## Step 3 — Create the analysis specification
-
-Only needed once, or after a design change — the specification is already in the
-repository:
+Open `ExecuteAnalyses.R`. The first ~40 lines are the INPUTS block. Change these
+values to match your site:
 
 ```r
-source("scriptsForStudyDesigner/CreateStrategusAnalysisSpecifications.R")
+cdmDatabaseSchema  <- "my_cdm"        # schema with the clinical tables AND vocabulary
+workDatabaseSchema <- "my_scratch"    # schema the study may write to
+cohortTableName    <- "can_build_cohort"
+resultsFolder      <- "results"
+workFolder         <- "strategusInternals"
+databaseName       <- "MY_SITE"       # names the results sub-folder
+minCellCount       <- 5               # small cells are masked in the output
 ```
 
-It reads the cohorts from `inst/` and writes `inst/analysisSpecifications.json`.
-No database connection is needed for this step.
+Then the connection, using whichever form you found in step 3:
+
+```r
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms        = "postgresql",
+  server      = Sys.getenv("OHDSI_SERVER", "db.example.org/cdm"),
+  user        = Sys.getenv("OHDSI_USER", "my_user"),
+  password    = Sys.getenv("OHDSI_PASSWORD"),
+  pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+)
+```
+
+### Two things that catch people out
+
+**The vocabulary must be in the same schema as the clinical tables.** The study
+needs `person` *and* `concept` in `cdmDatabaseSchema`. Many sites keep the
+vocabulary in a separate schema; if yours does, ask your DBA for a schema or a
+view layer that exposes both.
+
+**The work schema must be writable.** The study creates cohort tables there. It
+never writes to your CDM.
 
 ---
 
-## Step 4 — Run the study
+## 7. Test the connection before running anything
+
+Uncomment these two lines at the end of the INPUTS block and run them:
+
+```r
+conn <- DatabaseConnector::connect(connectionDetails)
+DatabaseConnector::disconnect(conn)
+```
+
+If that errors, fix it now — the message will tell you whether the problem is the
+driver, the server, the credentials, or the schema name.
+
+Then check the data is where you said it is:
+
+```r
+conn <- DatabaseConnector::connect(connectionDetails)
+DatabaseConnector::querySql(conn, "SELECT COUNT(*) FROM my_cdm.person;")
+DatabaseConnector::querySql(conn, "SELECT COUNT(*) FROM my_cdm.concept;")
+DatabaseConnector::disconnect(conn)
+```
+
+Both should return a number. `0` people means you have pointed at the wrong
+schema; an error on `concept` means the vocabulary is not there.
+
+---
+
+## 8. Run the study
 
 ```r
 source("ExecuteAnalyses.R")
 ```
 
-This runs three Strategus modules in order:
-
-| Module | What it does | Rough time on 10k patients |
-|---|---|---|
-| CohortGenerator | Builds the cohorts into your work schema | under a minute |
-| CohortDiagnostics | Cohort diagnostics | ~3 minutes |
-| Characterization | Baseline characteristics, incidence rates, point prevalence | ~30 minutes |
-
-Progress is printed as each module runs, and you get a summary at the end:
+Three modules run in order: CohortGenerator, CohortDiagnostics,
+Characterization. You get a summary at the end:
 
 ```
 ✔ CohortGeneratorModule
@@ -160,95 +254,51 @@ Progress is printed as each module runs, and you get a summary at the end:
 ✔ CharacterizationModule
 ```
 
-Results land in `results/<databaseName>/`:
+Results appear in `results/<databaseName>/`.
 
-```
-results/MY_SITE/
-├── CohortGeneratorModule/   cohort counts, inclusion rules
-├── CohortDiagnosticsModule/ cohort diagnostics tables
-└── CharacterizationModule/
-    ├── c_incidence_summary.csv   ← the primary output
-    ├── c_target_covariates.csv   baseline characteristics
-    ├── c_target_counts.csv
-    └── ...
-```
-
-### If it fails part-way
-
-Each module is incremental, so re-running `ExecuteAnalyses.R` resumes where it
-stopped rather than starting again. To run only one module, uncomment
-`modulesToExecute` in `ExecuteAnalyses.R`:
-
-```r
-executionSettings <- Strategus::createCdmExecutionSettings(
-  ...,
-  modulesToExecute = c("CharacterizationModule")
-)
-```
-
-To start completely afresh, delete the folders under
-`strategusInternals/<databaseName>/` and `results/<databaseName>/`, and drop the
-cohort tables from your work schema.
+If it stops part-way, re-running resumes where it stopped — the modules are
+incremental.
 
 ---
 
-## Reading the results
+## 9. Check the results and share them
 
-`c_incidence_summary.csv` is long-format. Two things to know:
+The main output is `results/<databaseName>/CharacterizationModule/c_incidence_summary.csv`.
 
-- **`ref_id` distinguishes the two designs**: `1` is the incidence-rate design,
-  `2` the point-prevalence design. A `tar_id` of 1 is reused by both, so filter
-  on `ref_id`, not `tar_id`.
-- **`characterization_target_id` is an internal ID**, not your cohort ID. Join
-  through `c_target_settings.csv` to get it back.
-
-```r
-library(dplyr); library(readr)
-path <- "results/MY_SITE/CharacterizationModule"
-
-incidence <- read_csv(file.path(path, "c_incidence_summary.csv"))
-targets   <- read_csv(file.path(path, "c_target_settings.csv"))
-outcomes  <- read_csv(file.path(path, "c_outcome_def.csv"))
-
-incidence |>
-  filter(ref_id == 1, is.na(age_group_id), is.na(gender_name)) |>  # overall, not a stratum
-  left_join(select(targets, characterization_target_id, target_id),
-            by = "characterization_target_id") |>
-  left_join(select(outcomes, outcome_id, outcome_cohort_definition_id),
-            by = "outcome_id") |>
-  select(target = target_id, outcome = outcome_cohort_definition_id,
-         start_year, persons_at_risk, person_days, outcomes,
-         rate_per_100py = incidence_rate_p_100py)
-```
-
-Cells smaller than `minCellCount` are masked with `-5`, so your site's small
-counts are not disclosed.
-
----
-
-## Sharing your results
+Then:
 
 ```r
 source("ShareResults.R")
 ```
 
-This zips the aggregate CSVs in `results/<databaseName>/`. Only aggregate results
-are included — no patient-level data. Send the ZIP to the study coordinator as
-directed.
+It zips the aggregate results and asks before uploading anything. The ZIP
+contains counts and statistics only — no patient-level data.
 
 ---
 
-## Troubleshooting
+## Where to look if you get stuck
 
-| Symptom | Cause and fix |
+| Problem | Guide |
 |---|---|
-| `NoSuchMethodError: java.nio.ByteBuffer.clear()` | Java 8. The setup script checks for this first; install Java 17+ and set `JAVA_HOME`. |
-| `The pathToDriver argument hasn't been specified` | Set `pathToDriver`, or run `DatabaseConnector::downloadJdbcDrivers("<dbms>")`. |
-| `You must provide a default configuration` | `config.yml` is missing — you are not in the project root, or the clone is incomplete. |
-| `These target cohort IDs are not in inst/Cohorts.csv` | `inst/` is incomplete; re-clone or restore the cohort assets. |
-| R seems to hang at startup | renv is installing itself. Let it finish once; after that under a minute is normal. |
-| `roles` / permission errors creating tables | Your work schema is not writable, or the user lacks `CREATE`. |
-| Very slow characterization | Expected on large datasets. It is parallelised; raise `maxCores` in `createCdmExecutionSettings()` if you have cores free. |
+| Installing R, Java, RTools, RStudio | [Setting up the R environment](https://ohdsi.github.io/Hades/rSetup.html) |
+| Installing all HADES packages | [Installing HADES](https://ohdsi.github.io/Hades/installingHades.html) |
+| Connecting to your database | [Connecting to a Database](https://ohdsi.github.io/Hades/connecting.html) |
+| Which arguments your platform needs | [`createConnectionDetails` reference](https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html) |
+| JDBC drivers, Windows auth, Kerberos | [Connecting to a database (DatabaseConnector)](https://ohdsi.github.io/DatabaseConnector/articles/Connecting.html) |
+| Drivers that must be sourced separately | [jdbcDrivers reference](https://ohdsi.github.io/DatabaseConnector/reference/jdbcDrivers.html) |
+| Is my platform supported? | [Supported Database Platforms](https://ohdsi.github.io/Hades/supportedPlatforms.html) |
+| How the CDM is organised | [The Book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/) |
 
-Raise an issue with the log from `results/<databaseName>/strategus-log.txt`
-attached. Do not post credentials or patient-level data.
+### Known error messages
+
+| Message | Cause |
+|---|---|
+| `NoSuchMethodError: java.nio.ByteBuffer.clear()` | Java 8. Install Java 17+ and restart R. |
+| `The pathToDriver argument hasn't been specified` | No JDBC driver. Set `DATABASECONNECTOR_JAR_FOLDER` or `pathToDriver`. |
+| `relation "my_cdm.concept" does not exist` | Vocabulary is in a different schema from `person`. |
+| `permission denied for schema my_scratch` | Your user cannot write to the work schema. |
+| R hangs at startup | renv is installing itself. Let it finish once. |
+
+If none of this helps, raise an issue with the log attached — it is at
+`results/<databaseName>/strategus-log.txt`. Please do not post credentials or
+patient-level data.
