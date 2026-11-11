@@ -13,8 +13,7 @@
 source("scriptsForStudyCoordinator/ResultsSchemaHelperFunctions.R")
 
 # Get the study configuration from the config.yml
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
+config <- config::get()
 
 createResultsSchema(
   resultsDatabaseConnectionDetails = config$resultsConnectionDetails,

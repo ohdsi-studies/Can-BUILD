@@ -14,8 +14,7 @@
 
 source("scriptsForStudyDesigner/WebApiHelperFunctions.R")
 library(dplyr)
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
+config <- config::get()
 authWebApi(authMethod = "none")
 
 # Define the cohorts that you'd like to download for use in this 

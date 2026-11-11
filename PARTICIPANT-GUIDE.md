@@ -1,11 +1,11 @@
 # Running the Study on Your Data
 
 This guide is for study-a-thon participants. It takes you from a fresh clone to
-aggregate results on your own OMOP CDM, in five steps.
+aggregate results on your own OMOP CDM, in four steps.
 
 You do **not** edit any tracked file. Everything specific to your site lives in
-two untracked files: `config.user.yml` for your settings and `.Renviron` for
-your password.
+one checked-in file (`ExecuteAnalyses.R`), plus `.Renviron` for your password
+if you do not use the OS keychain.
 
 ---
 
@@ -54,104 +54,77 @@ the first time. **Restart R afterwards.**
 
 ---
 
-## Step 2 - Set up your database connection
+## Step 2 — Tell the study about your database
 
-Run this from the project root:
+Everything you need to change is in the **INPUTS block at the top of
+`ExecuteAnalyses.R`**. Open the file, edit those values, save it. There is no
+separate settings file and no script to run.
 
 ```r
-source("DatabaseSetup.R")
+##=========== START OF INPUTS ==========
+cdmDatabaseSchema  <- "my_cdm"       # clinical tables AND vocabulary
+workDatabaseSchema <- "my_scratch"   # must be writable
+cohortTableName    <- "can_build_cohort"
+resultsFolder      <- "results"
+workFolder         <- "strategusInternals"
+databaseName       <- "MY_SITE"
+minCellCount       <- 5
+
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = "postgresql",
+  server = Sys.getenv("OHDSI_SERVER", "db.example.org/cdm"),
+  user = Sys.getenv("OHDSI_USER", "my_user"),
+  password = Sys.getenv("OHDSI_PASSWORD"),
+  pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+)
+##=========== END OF INPUTS ==========
 ```
 
-It **checks** what you have and tells you what to fix. It does not ask questions
-unless you want it to.
+### The password
 
-The checks, in order:
+`ExecuteAnalyses.R` is committed to git, so **do not type your password into
+it**. Use one of these instead:
 
-1. Java can be started and is new enough
-2. `config.user.yml` exists
-3. Your password is available from `.Renviron`
-4. The JDBC driver is present
-5. The connection works
-6. The CDM schema is readable
-7. The vocabulary is in the same schema
-8. The work schema is writable
+**OS keychain (recommended).** Store it once per machine:
 
-```
-[ OK ] Java
-        Java 21.0.13
-[ OK ] Settings file
-[ OK ] Password
-[ OK ] JDBC driver
-[ OK ] Connection
-[ OK ] CDM schema
-        my_cdm: 12,345,678 people
-[ OK ] Vocabulary
-[ OK ] Work schema
+```r
+keyring::key_set("ohdsi")     # prompts for the password, stores it encrypted
 ```
 
-If anything fails, it prints the exact fix. If you would rather be asked
-questions than read instructions, say `y` when it offers the wizard.
+then set `password = keyring::key_get("ohdsi")` in the INPUTS block.
 
-### Where your settings go
-
-Two files, both gitignored, neither of which you have to write by hand:
-
-| File | Holds | Committed? |
-|---|---|---|
-| `config.user.yml` | server, user, schemas, driver folder | no |
-| `.Renviron` | the password only | no |
-
-```yaml
-# config.user.yml
-dbms: "postgresql"
-server: "db.example.org/cdm"
-user: "my_user"
-cdmDatabaseSchema: "my_cdm"
-workDatabaseSchema: "my_scratch"
-cohortTableName: "can_build_cohort"
-databaseName: "MY_SITE"
-pathToDriver: "/path/to/jdbc"
-```
+**.Renviron.** Create a file called `.Renviron` in the project folder:
 
 ```bash
-# .Renviron - password only, never in the YAML
-OHDSI_PASSWORD_MY_SITE="your password"
+OHDSI_PASSWORD="your password"
+OHDSI_SERVER="db.example.org/cdm"
+OHDSI_USER="my_user"
 ```
 
-The password variable is `OHDSI_PASSWORD_<DATABASE_NAME>`, where `DATABASE_NAME`
-is the `databaseName` above, uppercased. A plain `OHDSI_DB_PASSWORD` also works.
+`.Renviron` is in `.gitignore`, so git will not commit it. R reads it **only at
+startup** — after creating or changing it, restart R.
 
-R reads `.Renviron` **only at startup**, so after creating or changing it,
-restart R. The check script detects this case and tells you.
+### Check list before your first run
 
-### Creating the files
+Work down this list. Each item gives a clear error if it is wrong, so you will
+find out immediately rather than half an hour into a run.
 
-- **Wizard:** run `source("DatabaseSetup.R")` and answer `y` when offered, or
-  call `runDatabaseWizard()` directly. It tests the connection and writes both
-  files.
-- **By hand:** `cp config.user.example.yml config.user.yml`, edit it, and add
-  the password line to `.Renviron`.
+| Check | How to verify |
+|---|---|
+| Java 17 or newer | `export JAVA_HOME=/path/to/jdk-17`, restart R. Java 8 fails with `NoSuchMethodError: java.nio.ByteBuffer.clear()` |
+| JDBC driver present | `DatabaseConnector::downloadJdbcDrivers("postgresql")`, or point `pathToDriver` at a folder of `.jar` files |
+| Password loads | `Sys.getenv("OHDSI_PASSWORD")` returns it, not `""` |
+| Connection works | uncomment the `connect()` / `disconnect()` pair in the INPUTS block and run it |
+| CDM readable | the schema contains `person`, `observation_period` and `visit_occurrence` |
+| Vocabulary present | `concept`, `concept_ancestor` and `concept_relationship` are in the **same** schema as `person` |
+| Work schema writable | your database user has `CREATE` permission in `workDatabaseSchema` |
 
-## Step 3 — Check the connection and that your CDM has the data
+The vocabulary item trips people up most often: many sites keep the vocabulary
+in a separate schema from the clinical data. The study needs both in one schema,
+or a view layer that exposes both as one.
 
-```r
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
 
-conn <- DatabaseConnector::connect(config$connectionDetails)
-print(DatabaseConnector::querySql(
-  conn,
-  sprintf("SELECT COUNT(*) AS n FROM %s.person;", config$cdmDatabaseSchema)
-))
-DatabaseConnector::disconnect(conn)
-```
-
-If that returns a count, you are ready. If it errors, the message tells you
-which piece is wrong (driver, host, credentials, schema name).
-
----
-
-## Step 4 — Create the analysis specification
+## Step 3 — Create the analysis specification
 
 Only needed once, or after a design change — the specification is already in the
 repository:
@@ -165,7 +138,7 @@ No database connection is needed for this step.
 
 ---
 
-## Step 5 — Run the study
+## Step 4 — Run the study
 
 ```r
 source("ExecuteAnalyses.R")
@@ -272,7 +245,6 @@ directed.
 | `NoSuchMethodError: java.nio.ByteBuffer.clear()` | Java 8. The setup script checks for this first; install Java 17+ and set `JAVA_HOME`. |
 | `The pathToDriver argument hasn't been specified` | Set `pathToDriver`, or run `DatabaseConnector::downloadJdbcDrivers("<dbms>")`. |
 | `You must provide a default configuration` | `config.yml` is missing — you are not in the project root, or the clone is incomplete. |
-| `could not find function "getStudyConfig"` | Source `scriptsForStudyDesigner/getStudyConfig.R` first, or run the scripts from the project root. |
 | `These target cohort IDs are not in inst/Cohorts.csv` | `inst/` is incomplete; re-clone or restore the cohort assets. |
 | R seems to hang at startup | renv is installing itself. Let it finish once; after that under a minute is normal. |
 | `roles` / permission errors creating tables | Your work schema is not writable, or the user lacks `CREATE`. |

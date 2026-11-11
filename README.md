@@ -84,68 +84,72 @@ If you are running this study at your site, follow
 renv::restore()                     # then restart R
                                     # NEVER renv::snapshot() - see renv/README.md
 
-# 2. check your database setup (or run the wizard)
-source("DatabaseSetup.R")
+# 2. edit the INPUTS block at the top of ExecuteAnalyses.R for your database
+#    (keep the password out of it - use keyring or .Renviron)
 
 # 3. run
 source("ExecuteAnalyses.R")
 ```
 
-You never edit a checked-in file: your database details live in
-`config.user.yml` and the password in `.Renviron`, both gitignored.
-
 ## Configuration
 
-Settings are split by whether they are secret:
-
-| File | Checked in? | Holds |
-|---|---|---|
-| `config.yml` | yes | Study defaults: result/work folders, file names, study name |
-| `config.user.yml` | **no** | Your database server, user, schema names, JDBC driver folder |
-| `.Renviron` | **no** | Your database password only |
-
-Keeping the password out of the YAML means it cannot be committed by accident,
-and `config.user.yml` stays readable and diffable.
-
-Check your setup at any time, or have it set up for you:
+Settings are edited directly in the INPUTS block at the top of
+`ExecuteAnalyses.R` - the same pattern as
+[StrategusStudyRepoTemplate](https://github.com/ohdsi/StrategusStudyRepoTemplate).
+There is no separate settings file to learn.
 
 ```r
-source("DatabaseSetup.R")     # checks what you have, prints exactly what to fix
-```
+##=========== START OF INPUTS ==========
+cdmDatabaseSchema  <- "my_cdm"       # clinical tables AND vocabulary
+workDatabaseSchema <- "my_scratch"   # must be writable
+cohortTableName    <- "can_build_cohort"
+resultsFolder      <- "results"
+workFolder         <- "strategusInternals"
+databaseName       <- "MY_SITE"
+minCellCount       <- 5
 
-If anything is missing it offers the wizard. Or call it directly:
-
-```r
-runDatabaseWizard()
-```
-
-Both entry points are documented in the [participant guide](PARTICIPANT-GUIDE.md#step-2---set-up-your-database-connection).
-
-### Reading the settings in code
-
-```r
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()          # config.yml + config.user.yml
-db     <- studyDatabaseSettings()   # just the database settings, password resolved
-details <- studyConnectionDetails() # ConnectionDetails, ready to connect
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = "postgresql",
+  server = Sys.getenv("OHDSI_SERVER", "db.example.org/cdm"),
+  user = Sys.getenv("OHDSI_USER", "my_user"),
+  password = Sys.getenv("OHDSI_PASSWORD"),
+  pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+)
+##=========== END OF INPUTS ==========
 ```
 
 ### The password
 
-A named variable, so several databases can sit side by side:
+Never write it in `ExecuteAnalyses.R` - that file is committed. Use either:
 
-```bash
-OHDSI_PASSWORD_<DATABASE_NAME>="your password"
-```
+- **OS keychain** (recommended): `keyring::key_set("ohdsi")` once, then
+  `password = keyring::key_get("ohdsi")`
+- **`.Renviron`**, which git ignores:
 
-`<DATABASE_NAME>` is the `databaseName` from `config.user.yml`, uppercased, with
-anything that is not a letter or digit replaced by `_`. A plain
-`OHDSI_DB_PASSWORD` also works.
+  ```bash
+  OHDSI_PASSWORD="your password"
+  OHDSI_SERVER="db.example.org/cdm"
+  OHDSI_USER="my_user"
+  ```
 
-R reads `.Renviron` **only at startup**, so restart R after editing it.
-`DatabaseSetup.R` detects the case where the variable is present in the file but
-not yet loaded and tells you to restart, rather than reporting the password as
-missing.
+  R reads `.Renviron` **only at startup** - restart R after editing it.
+
+### Before your first run
+
+Work down the INPUTS block and confirm each of these:
+
+| Check | How |
+|---|---|
+| Java 17+ | `export JAVA_HOME=/path/to/jdk-17`, then restart R |
+| JDBC driver | `DatabaseConnector::downloadJdbcDrivers("postgresql")`, or set `pathToDriver` |
+| Credentials load | `Sys.getenv("OHDSI_PASSWORD")` returns your password |
+| Connection works | uncomment the `connect()` / `disconnect()` pair in the INPUTS block and run it |
+| CDM readable | `SELECT COUNT(*) FROM <cdmDatabaseSchema>.person` returns a number |
+| Vocabulary present | `concept` is in the **same** schema as `person` |
+| Work schema writable | your user has `CREATE` there |
+
+If any of those fail, fix it before running the study - each one produces its
+own clear error at that step.
 
 ## Running the study
 
@@ -168,12 +172,13 @@ missing.
    > them at run time. `StudyPackages.R` in the project root lists them so a
    > snapshot keeps them; without it, a snapshot would drop them.
 
-2. Install **Java 17 or newer** and point `JAVA_HOME` at it (this is also set
-   from the environment). The pinned DatabaseConnector 8.0.0 fails on Java 8
+2. Install **Java 17 or newer** and point `JAVA_HOME` at it. The pinned
+   DatabaseConnector 8.0.0 fails on Java 8
    (`NoSuchMethodError: java.nio.ByteBuffer.clear()`).
 
-3. Create `config.user.yml` and `.Renviron` for your machine, by running
-   `source("DatabaseSetup.R")` and following the prompts (see Configuration).
+3. Edit the INPUTS block at the top of `ExecuteAnalyses.R`: schemas, folders and
+   connection details. Put the password in `keyring` or `.Renviron`, not in the
+   file. The check list under [Configuration](#configuration) covers each value.
 
 4. Create the analysis specification (only needed after a design change):
 

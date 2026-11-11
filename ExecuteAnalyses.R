@@ -17,44 +17,58 @@ Sys.setenv("_JAVA_OPTIONS" = "-Xmx4g") # Sets the Java maximum heap space to 4GB
 Sys.setenv("VROOM_THREADS" = 1) # Sets the number of threads to 1 to avoid deadlocks on file system
 
 ##=========== START OF INPUTS ==========
-# Study configuration ---------------------------------------------------------
-# Database settings come from config.user.yml (yours, not committed) and the
-# password from .Renviron (also not committed):
+# Everything you need to change for your database is in this block. There is no
+# separate settings file: edit the values below, save, then run this script.
 #
-#   config.yml         checked in. Study defaults.
-#   config.user.yml    NOT checked in. Your server, schemas, driver folder.
-#   .Renviron          NOT checked in. The database password only.
+# If you prefer to keep them outside the repo, put them in your .Renviron and
+# read them with Sys.getenv() - see the notes further down.
+
+# --- Where the data is -------------------------------------------------------
+cdmDatabaseSchema <- "my_cdm"      # schema with the clinical tables AND vocabulary
+workDatabaseSchema <- "my_scratch" # schema the study may write to (cohort tables)
+cohortTableName <- "can_build_cohort" # table created inside workDatabaseSchema
+
+# --- Where the output goes ---------------------------------------------------
+resultsFolder <- "results"          # output files
+workFolder <- "strategusInternals"  # intermediate files, safe to delete
+databaseName <- "MY_SITE"           # names the results sub-folder
+minCellCount <- 5                   # small cells are masked in the output
+
+# --- How to connect ----------------------------------------------------------
+# Full documentation: https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html
 #
-# To check your setup, or be walked through creating those files:
+# The password is deliberately NOT written in this file. Read it from one of:
 #
-#   source("DatabaseSetup.R")
+#   keyring::key_get("ohdsi")   # recommended: OS keychain, set once with
+#                               # keyring::key_set("ohdsi")
+#   Sys.getenv("OHDSI_PASSWORD")  # from .Renviron, which git ignores
 #
-# Anything you leave out of config.user.yml falls back to config.yml. Every
-# value can also be set with an OHDSI_* environment variable, which wins.
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
-db <- studyDatabaseSettings(config)
+# On macOS or Linux, .Renviron lives in this folder and is read when R starts:
+#
+#   OHDSI_PASSWORD="your password"
+#   OHDSI_SERVER="db.example.org/cdm"
+#   OHDSI_USER="my_user"
+#
+# .Renviron is read ONLY at R startup, so restart R after editing it.
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = "postgresql",
+  server = Sys.getenv("OHDSI_SERVER", "db.example.org/cdm"),
+  user = Sys.getenv("OHDSI_USER", "my_user"),
+  password = Sys.getenv("OHDSI_PASSWORD"),
+  pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+)
 
-cdmDatabaseSchema <- Sys.getenv("OHDSI_CDM_SCHEMA", db$cdmDatabaseSchema)
-workDatabaseSchema <- Sys.getenv("OHDSI_WORK_SCHEMA", db$workDatabaseSchema)
-cohortTableName <- Sys.getenv("OHDSI_COHORT_TABLE", db$cohortTableName)
-databaseName <- Sys.getenv("OHDSI_DATABASE_NAME", db$databaseName)
-minCellCount <- as.integer(Sys.getenv("OHDSI_MIN_CELL_COUNT", db$minCellCount))
-resultsFolder <- config$resultFolder # Where the output files will be written
-workFolder <- config$workFolder # Where the intermediate work files will be written
+# Java: DatabaseConnector needs Java 17 or newer. If your default java is older,
+# point JAVA_HOME at a newer JDK before starting R:
+#
+#   export JAVA_HOME=/path/to/jdk-17
+#
+# JDBC driver: if pathToDriver is not set, download one once with
+#   DatabaseConnector::downloadJdbcDrivers("postgresql")
 
-# DatabaseConnector 8 needs Java 11+ and the JDBC driver folder passed
-# explicitly. JAVA_HOME is read from the environment; DatabaseSetup.R checks it.
-if (nzchar(config$javaHome %||% "")) {
-  Sys.setenv(JAVA_HOME = config$javaHome)
-}
-Sys.setenv(DATABASECONNECTOR_JAR_FOLDER = db$pathToDriver %||% "")
-
-# Connection details. The password is read from the environment by
-# studyConnectionDetails(), so it never appears in this script or in the YAML.
-connectionDetails <- studyConnectionDetails(db, config)
-
-# You can use this snippet to test your connection
+# Check the connection before running the study. Run these four lines on their
+# own and fix any error before going further:
+#
 #conn <- DatabaseConnector::connect(connectionDetails)
 #DatabaseConnector::disconnect(conn)
 
@@ -68,7 +82,7 @@ workFolder <- file.path(workFolder, databaseName)
 cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = cohortTableName)
 
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
-  fileName = file.path(config$projectRootFolder, "inst", config$studySpecificationFileName)
+  fileName = file.path("inst", "analysisSpecifications.json")
 )
 
 executionSettings <- Strategus::createCdmExecutionSettings(

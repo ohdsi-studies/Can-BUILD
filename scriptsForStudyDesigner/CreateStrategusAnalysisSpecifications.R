@@ -31,8 +31,7 @@
 ################################################################################
 library(Strategus)
 library(tibble)
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
+config <- config::get()
 
 # ==============================================================================
 # Cohort assets

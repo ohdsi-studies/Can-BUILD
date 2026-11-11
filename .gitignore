@@ -72,11 +72,5 @@ jnj/*/
 # Strategus / DatabaseConnector error reports
 errorReportSql.txt
 
-# Local, machine-specific study settings (see config.yml and README)
-config.local.yml
-
 # JetBrains IDE
 .idea/
-
-# Local, machine-specific study settings (see DatabaseSetup.R)
-config.user.yml

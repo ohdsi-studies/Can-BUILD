@@ -21,8 +21,7 @@ if(!dir.exists('./drivers')){
 }
 
 # Get the study configuration from the config.yml
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
+config <- config::get()
 
 library(OhdsiShinyAppBuilder)
 library(OhdsiShinyModules)

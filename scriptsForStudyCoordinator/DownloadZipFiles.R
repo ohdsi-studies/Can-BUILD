@@ -1,5 +1,4 @@
-source("scriptsForStudyDesigner/getStudyConfig.R")
-config <- getStudyConfig()
+config <- config::get()
 
 # Don't make changes below this line -------------------------------------------
 
