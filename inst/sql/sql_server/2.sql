@@ -24,6 +24,246 @@ FROM
   FROM 
   (
   -- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2000, 4, 1) as start_date, DATEFROMPARTS(2000, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2000, 4, 1) and C.end_date >= DATEFROMPARTS(2000, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2000, 4, 1) and C.end_date >= DATEFROMPARTS(2000, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2001, 4, 1) as start_date, DATEFROMPARTS(2001, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2001, 4, 1) and C.end_date >= DATEFROMPARTS(2001, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2001, 4, 1) and C.end_date >= DATEFROMPARTS(2001, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2002, 4, 1) as start_date, DATEFROMPARTS(2002, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2002, 4, 1) and C.end_date >= DATEFROMPARTS(2002, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2002, 4, 1) and C.end_date >= DATEFROMPARTS(2002, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2003, 4, 1) as start_date, DATEFROMPARTS(2003, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2003, 4, 1) and C.end_date >= DATEFROMPARTS(2003, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2003, 4, 1) and C.end_date >= DATEFROMPARTS(2003, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2004, 4, 1) as start_date, DATEFROMPARTS(2004, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2004, 4, 1) and C.end_date >= DATEFROMPARTS(2004, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2004, 4, 1) and C.end_date >= DATEFROMPARTS(2004, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2005, 4, 1) as start_date, DATEFROMPARTS(2005, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2005, 4, 1) and C.end_date >= DATEFROMPARTS(2005, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2005, 4, 1) and C.end_date >= DATEFROMPARTS(2005, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2006, 4, 1) as start_date, DATEFROMPARTS(2006, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2006, 4, 1) and C.end_date >= DATEFROMPARTS(2006, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2006, 4, 1) and C.end_date >= DATEFROMPARTS(2006, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2007, 4, 1) as start_date, DATEFROMPARTS(2007, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2007, 4, 1) and C.end_date >= DATEFROMPARTS(2007, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2007, 4, 1) and C.end_date >= DATEFROMPARTS(2007, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2008, 4, 1) as start_date, DATEFROMPARTS(2008, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2008, 4, 1) and C.end_date >= DATEFROMPARTS(2008, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2008, 4, 1) and C.end_date >= DATEFROMPARTS(2008, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2009, 4, 1) as start_date, DATEFROMPARTS(2009, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2009, 4, 1) and C.end_date >= DATEFROMPARTS(2009, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2009, 4, 1) and C.end_date >= DATEFROMPARTS(2009, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2010, 4, 1) as start_date, DATEFROMPARTS(2010, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2010, 4, 1) and C.end_date >= DATEFROMPARTS(2010, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2010, 4, 1) and C.end_date >= DATEFROMPARTS(2010, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2011, 4, 1) as start_date, DATEFROMPARTS(2011, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2011, 4, 1) and C.end_date >= DATEFROMPARTS(2011, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2011, 4, 1) and C.end_date >= DATEFROMPARTS(2011, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2012, 4, 1) as start_date, DATEFROMPARTS(2012, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2012, 4, 1) and C.end_date >= DATEFROMPARTS(2012, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2012, 4, 1) and C.end_date >= DATEFROMPARTS(2012, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2013, 4, 1) as start_date, DATEFROMPARTS(2013, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2013, 4, 1) and C.end_date >= DATEFROMPARTS(2013, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2013, 4, 1) and C.end_date >= DATEFROMPARTS(2013, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2014, 4, 1) as start_date, DATEFROMPARTS(2014, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2014, 4, 1) and C.end_date >= DATEFROMPARTS(2014, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2014, 4, 1) and C.end_date >= DATEFROMPARTS(2014, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2015, 4, 1) as start_date, DATEFROMPARTS(2015, 4, 1) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2015, 4, 1) and C.end_date >= DATEFROMPARTS(2015, 4, 1)
+AND C.start_date <= DATEFROMPARTS(2015, 4, 1) and C.end_date >= DATEFROMPARTS(2015, 4, 1)
+-- End Observation Period Criteria
+
+UNION ALL
+-- Begin Observation Period Criteria
 select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2016, 4, 1) as start_date, DATEFROMPARTS(2016, 4, 1) as end_date,
        CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
 
@@ -238,6 +478,358 @@ from ( -- first_ends
 select event_id, person_id, op_end_date as end_date from #included_events
 UNION ALL
 -- Censor Events
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2001, 3, 31) as start_date, DATEFROMPARTS(2001, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2001, 3, 31) and C.end_date >= DATEFROMPARTS(2001, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2001, 3, 31) and C.end_date >= DATEFROMPARTS(2001, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2002, 3, 31) as start_date, DATEFROMPARTS(2002, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2002, 3, 31) and C.end_date >= DATEFROMPARTS(2002, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2002, 3, 31) and C.end_date >= DATEFROMPARTS(2002, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2003, 3, 31) as start_date, DATEFROMPARTS(2003, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2003, 3, 31) and C.end_date >= DATEFROMPARTS(2003, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2003, 3, 31) and C.end_date >= DATEFROMPARTS(2003, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2004, 3, 31) as start_date, DATEFROMPARTS(2004, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2004, 3, 31) and C.end_date >= DATEFROMPARTS(2004, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2004, 3, 31) and C.end_date >= DATEFROMPARTS(2004, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2005, 3, 31) as start_date, DATEFROMPARTS(2005, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2005, 3, 31) and C.end_date >= DATEFROMPARTS(2005, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2005, 3, 31) and C.end_date >= DATEFROMPARTS(2005, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2006, 3, 31) as start_date, DATEFROMPARTS(2006, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2006, 3, 31) and C.end_date >= DATEFROMPARTS(2006, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2006, 3, 31) and C.end_date >= DATEFROMPARTS(2006, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2007, 3, 31) as start_date, DATEFROMPARTS(2007, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2007, 3, 31) and C.end_date >= DATEFROMPARTS(2007, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2007, 3, 31) and C.end_date >= DATEFROMPARTS(2007, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2008, 3, 31) as start_date, DATEFROMPARTS(2008, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2008, 3, 31) and C.end_date >= DATEFROMPARTS(2008, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2008, 3, 31) and C.end_date >= DATEFROMPARTS(2008, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2009, 3, 31) as start_date, DATEFROMPARTS(2009, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2009, 3, 31) and C.end_date >= DATEFROMPARTS(2009, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2009, 3, 31) and C.end_date >= DATEFROMPARTS(2009, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2010, 3, 31) as start_date, DATEFROMPARTS(2010, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2010, 3, 31) and C.end_date >= DATEFROMPARTS(2010, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2010, 3, 31) and C.end_date >= DATEFROMPARTS(2010, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2011, 3, 31) as start_date, DATEFROMPARTS(2011, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2011, 3, 31) and C.end_date >= DATEFROMPARTS(2011, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2011, 3, 31) and C.end_date >= DATEFROMPARTS(2011, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2012, 3, 31) as start_date, DATEFROMPARTS(2012, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2012, 3, 31) and C.end_date >= DATEFROMPARTS(2012, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2012, 3, 31) and C.end_date >= DATEFROMPARTS(2012, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2013, 3, 31) as start_date, DATEFROMPARTS(2013, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2013, 3, 31) and C.end_date >= DATEFROMPARTS(2013, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2013, 3, 31) and C.end_date >= DATEFROMPARTS(2013, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2014, 3, 31) as start_date, DATEFROMPARTS(2014, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2014, 3, 31) and C.end_date >= DATEFROMPARTS(2014, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2014, 3, 31) and C.end_date >= DATEFROMPARTS(2014, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2015, 3, 31) as start_date, DATEFROMPARTS(2015, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2015, 3, 31) and C.end_date >= DATEFROMPARTS(2015, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2015, 3, 31) and C.end_date >= DATEFROMPARTS(2015, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
+select i.event_id, i.person_id, MIN(c.start_date) as end_date
+FROM #included_events i
+JOIN
+(
+-- Begin Observation Period Criteria
+select C.person_id, C.observation_period_id as event_id, DATEFROMPARTS(2016, 3, 31) as start_date, DATEFROMPARTS(2016, 3, 31) as end_date,
+       CAST(NULL as bigint) as visit_occurrence_id, C.start_date as sort_date
+
+from 
+(
+  select op.person_id,op.observation_period_id,op.period_type_concept_id,op.observation_period_start_date as start_date, op.observation_period_end_date as end_date , row_number() over (PARTITION BY op.person_id ORDER BY op.observation_period_start_date) as ordinal
+  FROM @cdm_database_schema.OBSERVATION_PERIOD op
+) C
+
+WHERE C.start_date <= DATEFROMPARTS(2016, 3, 31) and C.end_date >= DATEFROMPARTS(2016, 3, 31)
+AND C.start_date <= DATEFROMPARTS(2016, 3, 31) and C.end_date >= DATEFROMPARTS(2016, 3, 31)
+-- End Observation Period Criteria
+
+) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
+GROUP BY i.event_id, i.person_id
+
+UNION ALL
 select i.event_id, i.person_id, MIN(c.start_date) as end_date
 FROM #included_events i
 JOIN

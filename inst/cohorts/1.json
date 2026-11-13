@@ -5,6 +5,134 @@
 			{
 				"ObservationPeriod" : {
 					"UserDefinedPeriod" : {
+						"StartDate" : "2000-04-01",
+						"EndDate" : "2000-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2001-04-01",
+						"EndDate" : "2001-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2002-04-01",
+						"EndDate" : "2002-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2003-04-01",
+						"EndDate" : "2003-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2004-04-01",
+						"EndDate" : "2004-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2005-04-01",
+						"EndDate" : "2005-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2006-04-01",
+						"EndDate" : "2006-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2007-04-01",
+						"EndDate" : "2007-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2008-04-01",
+						"EndDate" : "2008-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2009-04-01",
+						"EndDate" : "2009-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2010-04-01",
+						"EndDate" : "2010-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2011-04-01",
+						"EndDate" : "2011-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2012-04-01",
+						"EndDate" : "2012-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2013-04-01",
+						"EndDate" : "2013-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2014-04-01",
+						"EndDate" : "2014-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
+						"StartDate" : "2015-04-01",
+						"EndDate" : "2015-04-01"
+					}
+				}
+			},
+			{
+				"ObservationPeriod" : {
+					"UserDefinedPeriod" : {
 						"StartDate" : "2016-04-01",
 						"EndDate" : "2016-04-01"
 					}
@@ -108,6 +236,134 @@
 	},
 	"InclusionRules" : [],
 	"CensoringCriteria" : [
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2001-03-31",
+					"EndDate" : "2001-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2002-03-31",
+					"EndDate" : "2002-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2003-03-31",
+					"EndDate" : "2003-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2004-03-31",
+					"EndDate" : "2004-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2005-03-31",
+					"EndDate" : "2005-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2006-03-31",
+					"EndDate" : "2006-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2007-03-31",
+					"EndDate" : "2007-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2008-03-31",
+					"EndDate" : "2008-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2009-03-31",
+					"EndDate" : "2009-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2010-03-31",
+					"EndDate" : "2010-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2011-03-31",
+					"EndDate" : "2011-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2012-03-31",
+					"EndDate" : "2012-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2013-03-31",
+					"EndDate" : "2013-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2014-03-31",
+					"EndDate" : "2014-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2015-03-31",
+					"EndDate" : "2015-03-31"
+				}
+			}
+		},
+		{
+			"ObservationPeriod" : {
+				"UserDefinedPeriod" : {
+					"StartDate" : "2016-03-31",
+					"EndDate" : "2016-03-31"
+				}
+			}
+		},
 		{
 			"ObservationPeriod" : {
 				"UserDefinedPeriod" : {

@@ -72,7 +72,15 @@ if (length(missingTargets) > 0) {
 # before the second one counts as a new event.
 outcomes <- tibble::tribble(
   ~cohortId, ~cleanWindow,
-  3,         99999 # Note that this is only for the incidence rate setting, not used in prevalent design
+  101,         99999, # Note that this is only for the incidence rate setting, not used in prevalent design
+  201,         99999,
+  202,         99999,
+  203,         99999,
+  301,         99999,
+  302,         99999,
+  303,         99999,
+  401,         99999,
+  402,         99999
 )
 
 missingOutcomes <- setdiff(outcomes$cohortId, cohortDefinitionSet$cohortId)
@@ -113,6 +121,22 @@ prevalenceRiskWindowEnd <- 1
 # same baseline-covariate and incidence settings below.
 studyPeriods <- list(
   list(startDate = NULL, endDate = NULL),
+  list(startDate = "20000401", endDate = "20010331"),
+  list(startDate = "20010401", endDate = "20020331"),
+  list(startDate = "20020401", endDate = "20030331"),
+  list(startDate = "20030401", endDate = "20040331"),
+  list(startDate = "20040401", endDate = "20050331"),
+  list(startDate = "20050401", endDate = "20060331"),
+  list(startDate = "20060401", endDate = "20070331"),
+  list(startDate = "20070401", endDate = "20080331"),
+  list(startDate = "20080401", endDate = "20090331"),
+  list(startDate = "20090401", endDate = "20100331"),
+  list(startDate = "20100401", endDate = "20110331"),
+  list(startDate = "20110401", endDate = "20120331"),
+  list(startDate = "20120401", endDate = "20130331"),
+  list(startDate = "20130401", endDate = "20140331"),
+  list(startDate = "20140401", endDate = "20150331"),
+  list(startDate = "20150401", endDate = "20160331"),
   list(startDate = "20160401", endDate = "20170331"),
   list(startDate = "20170401", endDate = "20180331"),
   list(startDate = "20180401", endDate = "20190331"),

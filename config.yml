@@ -1,6 +1,6 @@
 default:
   studyName: "can_build"
-  resultsDatabaseSchema: "can_build_results"
+  resultsDatabaseSchema: "can_build"
   webApiUrl: "https://atlas-demo.ohdsi.org/WebAPI"
   projectRootFolder: !expr getwd() # Project root folder will hold the study settings
   resultFolder: !expr file.path(getwd(), "results")  # Folder will hold the study results

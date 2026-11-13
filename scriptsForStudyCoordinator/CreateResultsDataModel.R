@@ -15,10 +15,10 @@ source("scriptsForStudyCoordinator/ResultsSchemaHelperFunctions.R")
 # Get the study configuration from the config.yml
 config <- config::get()
 
-createResultsSchema(
-  resultsDatabaseConnectionDetails = config$resultsConnectionDetails,
-  resultsDatabaseSchema = config$resultsDatabaseSchema
-)
+# createResultsSchema(
+#   resultsDatabaseConnectionDetails = config$resultsConnectionDetails,
+#   resultsDatabaseSchema = config$resultsDatabaseSchema
+# )
 
 # Don't make changes below this line -------------------------------------------
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(

@@ -1,4 +1,12 @@
 atlas_id,cohort_id,cohort_name,logic_description,generate_stats
-1798688,1,Fiscal year cohort with 365 days prior observation,Anyone with observation on 1st April of each calendar year ending March 31st with 365 days prior observation,TRUE
-1798701,2,Fiscal year cohort with 1095 days prior observation,Anyone with observation on 1st April of each calendar year ending March 31st with 1095 days prior observation,TRUE
-1797622,3,Dummy outcome. If this is in the study you are a dummy,Placeholder outcome used to test the pipeline,TRUE
+1798688,1,Fiscal year cohort with 365 days prior observation,Logic: Anyone with observation on 1st April of each calendar year ending march 31st - 365 days prior obeservation,TRUE
+1798701,2,Fiscal year cohort with 1095 days prior observation,Logic: Anyone with observation on 1st April of each calendar year ending march 31st - 1095 days prior obeservation,TRUE
+1798796,101,[BUILD] Autism_opl_591,NA,TRUE
+1798795,201,[BUILD] Asthma_opl_334,NA,TRUE
+1798794,202,[BUILD] Asthma_opl_1164,NA,TRUE
+1798793,203,[BUILD] Asthma_opl_521,NA,TRUE
+1798792,301,[BUILD] Epilepsy_opl_254,NA,TRUE
+1798791,302,[BUILD] Epilepsy_opl_549,NA,TRUE
+1798790,303,[BUILD] Epilepsy_opl_1007,NA,TRUE
+1798789,401,[BUILD] COPD_opl_1271,NA,TRUE
+1798788,402,[BUILD] COPD_opl_1192,NA,TRUE

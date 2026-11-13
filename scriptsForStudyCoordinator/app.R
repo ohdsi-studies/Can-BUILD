@@ -47,11 +47,16 @@ shinyConfig <- OhdsiShinyAppBuilder::initializeModuleConfig() |>
 
 # now create the shiny app based on the config file and view the results
 # based on the connection 
-OhdsiShinyAppBuilder::createShinyApp(
+app <- OhdsiShinyAppBuilder::createShinyApp(
   title = config$studyName, # Change this to something friendly for the title of the app
   studyDescription = config$studyName, # Change this to something friendly for the description of the app
   config = shinyConfig, 
   connectionDetails = config$resultsConnectionDetails,
-  resultDatabaseSettings = OhdsiShinyAppBuilder::createDefaultResultDatabaseSettings(schema = config$resultsDatabaseSchema),
+  resultDatabaseSettings = OhdsiShinyAppBuilder::createDefaultResultDatabaseSettings(
+    schema = config$resultsDatabaseSchema,
+    incidenceTablePrefix = 'c_'
+  ),
   themePackage = themePackage
 )
+
+shiny::runApp(app)

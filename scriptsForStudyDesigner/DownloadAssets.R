@@ -28,10 +28,20 @@ cohortsToDownload <- tibble::tribble(
   # this script regenerates.
   1798688, 1, "Fiscal year cohort with 365 days prior observation",
   1798701, 2, "Fiscal year cohort with 1095 days prior observation",
-  1797622, 3, "Dummy outcome. If this is in the study you are a dummy"
+  1798796, 101, "[BUILD] Autism_opl_591",
+  1798795, 201,	"[BUILD] Asthma_opl_334",
+  1798794, 202, "[BUILD] Asthma_opl_1164",
+  1798793, 203, "[BUILD] Asthma_opl_521",
+  1798792, 301, "[BUILD] Epilepsy_opl_254",
+  1798791, 302, "[BUILD] Epilepsy_opl_549",
+  1798790, 303, "[BUILD] Epilepsy_opl_1007",
+  1798789, 401, "[BUILD] COPD_opl_1271",
+  1798788, 402, "[BUILD] COPD_opl_1192"
 )
 
 downloadCohortDefinitionSet(
   config = config,
   cohortsToDownload = cohortsToDownload
 )
+	
+
